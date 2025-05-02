@@ -1,16 +1,21 @@
 package com.example.controller;
 
+import java.util.Optional;
+
+import org.springframework.ui.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import com.example.entity.Account;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.example.entity.Account;
+import com.example.entity.Message;
 import com.example.service.AccountService;
+import com.example.service.MessageService;
 
-import org.springframework.ui.*;
+
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller using Spring. The endpoints you will need can be
@@ -23,12 +28,15 @@ import org.springframework.ui.*;
 public class SocialMediaController {
 
         private final AccountService accountService;
-        //private final AccountService accountService;
+        private final MessageService messageService;
 
-        public SocialMediaController(AccountService accountService) {
+        public SocialMediaController(AccountService accountService, MessageService messageService) {
             this.accountService = accountService;
+            this.messageService = messageService;
         }
 
+        // -- Start of Account Controlers
+        // -- These should be in differnet files but it may interfear with test units.
         @PostMapping("/register")
         public ResponseEntity<Account> registerUser(@RequestBody Account account)
         {
@@ -46,6 +54,41 @@ public class SocialMediaController {
 
             return ResponseEntity.status(HttpStatus.OK).body(account);
         }
+
+        @PostMapping("/login")
+        public ResponseEntity<Account> userLogin(@RequestBody Account account)
+        {
+
+            Optional<Account> loginAccount = accountService.userLogin(account);
+            if (loginAccount.isEmpty())
+            {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(loginAccount.get());
+        }
+        // -- End of account controlers
+
+        // -- Start of Message Controlers
+        // -- These should be in differnet files but it may interfear with test units.
+
+        @PostMapping("/messages")
+        public ResponseEntity<Message> postMessage(@RequestBody Message message)
+        {
+            if (! messageService.isValidMessageText(message.getMessageText()))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            if (! accountService.isExistingAccount(message.getPostedBy()))
+            {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            }
+
+            message = messageService.saveMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
+
+        // -- End of message Controlers
 }
 
 

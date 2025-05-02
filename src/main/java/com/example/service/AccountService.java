@@ -51,4 +51,24 @@ public class AccountService
 
         return true;
     }
+
+    public Optional <Account> userLogin(Account accountCanidate)
+    {
+        List<Account> userList = accountRepository.findAllByUsername(accountCanidate.getUsername());
+        
+        //There SHOULD only be one username but username does not have the @unique tag in the repository so I did this instad.
+        for (Account user : userList)
+        {
+            if (user.getPassword().equals(accountCanidate.getPassword()))
+            {
+                return Optional.of(user);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public boolean isExistingAccount(int id)
+    {
+        return accountRepository.findByAccountId(id).isPresent();
+    }
 }
