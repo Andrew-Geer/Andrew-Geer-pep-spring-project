@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.ui.*;
 import org.springframework.http.HttpStatus;
@@ -86,6 +87,12 @@ public class SocialMediaController {
 
             message = messageService.saveMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(message);
+        }
+
+        @GetMapping("/messages")
+        public ResponseEntity<List<Message>> getAllMessages()
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(messageService.getAllMessages());
         }
 
         // -- End of message Controlers

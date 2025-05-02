@@ -1,5 +1,6 @@
 package com.example.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import com.example.entity.Message;
@@ -33,5 +34,10 @@ public class MessageService {
             return false;
         }
         return true;
+    }
+
+    public List<Message> getAllMessages()
+    {
+        return messageRepository.findAll();
     }
 }
