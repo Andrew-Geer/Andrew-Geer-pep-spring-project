@@ -40,4 +40,14 @@ public class MessageService {
     {
         return messageRepository.findAll();
     }
+
+    public List<Message> getAllMessagesByUserId(int id)
+    {
+        return messageRepository.findAllByPostedBy(id);
+    }
+
+    public Message getMessageById(int id)
+    {
+        return messageRepository.findByMessageId(id);
+    }
 }

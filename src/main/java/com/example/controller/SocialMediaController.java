@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -93,6 +94,18 @@ public class SocialMediaController {
         public ResponseEntity<List<Message>> getAllMessages()
         {
             return ResponseEntity.status(HttpStatus.OK).body(messageService.getAllMessages());
+        }
+
+        @GetMapping("/accounts/{accountId}/messages")
+        public ResponseEntity<List<Message>> getAllUserMessages(@PathVariable(name = "accountId", required = true) int accountId)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(messageService.getAllMessagesByUserId(accountId));
+        }
+
+        @GetMapping("/messages/{messageId}")
+        public ResponseEntity<Message> getMessageById(@PathVariable(name = "messageId", required = true) int accountId)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessageById(accountId));
         }
 
         // -- End of message Controlers
