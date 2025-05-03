@@ -13,5 +13,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer>{
 
     Message findByMessageId(int id);
 
-    
+    int deleteByMessageId(int id);
 }

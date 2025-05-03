@@ -7,6 +7,7 @@ import org.springframework.ui.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -103,9 +104,20 @@ public class SocialMediaController {
         }
 
         @GetMapping("/messages/{messageId}")
-        public ResponseEntity<Message> getMessageById(@PathVariable(name = "messageId", required = true) int accountId)
+        public ResponseEntity<Message> getMessageById(@PathVariable(name = "messageId", required = true) int messageId)
         {
-            return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessageById(accountId));
+            return ResponseEntity.status(HttpStatus.OK).body(messageService.getMessageById(messageId));
+        }
+
+        @DeleteMapping("/messages/{messageId}")
+        public ResponseEntity<Integer> deleteMessageById(@PathVariable(name = "messageId", required = true) int messageId)
+        {
+            int rowsDeleated = messageService.deleteMessageById(messageId);
+            if (rowsDeleated > 0)
+            {
+                return ResponseEntity.status(HttpStatus.OK).body(rowsDeleated);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(null);
         }
 
         // -- End of message Controlers
